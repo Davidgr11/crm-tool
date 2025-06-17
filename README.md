@@ -2,7 +2,7 @@
 
 Un CRM (Customer Relationship Management) moderno y profesional desarrollado como proyecto de portafolio. Permite gestionar clientes de manera eficiente, con una interfaz responsive, dark mode y almacenamiento local usando IndexedDB.
 
-Preview: (AQUÍ)(https://crm-tool-automate.netlify.app/)
+Preview: [AQUÍ](https://davidgr11.github.io/crm-tool/)
 
 ## Tecnologías utilizadas
 
