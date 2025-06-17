@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM - IndexedDB</title>
+    <link rel="stylesheet" href="css/tailwind.min.css">
+</head>
+<body class="min-h-100 bg-gray-900">
+    <!-- Header/Navbar -->
+    <header class="bg-gray-800 shadow-md py-4 px-4 md:px-6 flex items-center justify-between z-50 relative">
+        <div class="flex items-center gap-2">
+            <img src="https://img.icons8.com/ios-filled/50/26e07f/address-book.png" alt="CRM Logo" class="w-8 h-8">
+            <span class="text-xl font-bold text-teal-400">CRM Portfolio</span>
+        </div>
+        <!-- Responsive Nav -->
+        <nav>
+            <button id="nav-toggle" class="md:hidden text-teal-300 focus:outline-none text-3xl" aria-label="Abrir menú">&#9776;</button>
+            <ul id="nav-menu" class="hidden md:flex gap-4 flex-row">
+                <li><a href="index.html" class="block text-teal-300 hover:text-yellow-400 font-semibold py-2 md:py-0">Clientes</a></li>
+                <li><a href="nuevo-cliente.html" class="block text-teal-300 hover:text-yellow-400 font-semibold py-2 md:py-0">Nuevo Cliente</a></li>
+            </ul>
+            <!-- Drawer y Backdrop -->
+            <div id="drawer-backdrop" class="hidden fixed inset-0 bg-black bg-opacity-60 z-[10000] md:hidden"></div>
+            <div id="drawer-menu" class="hidden fixed top-0 right-0 h-full w-64 bg-gray-900 z-[10001] shadow-lg flex flex-col p-6 gap-6 md:hidden transition-transform">
+                <button id="drawer-close" class="text-3xl text-gray-400 hover:text-teal-400 self-end mb-4" aria-label="Cerrar menú">&times;</button>
+                <a href="index.html" class="block text-teal-300 hover:text-yellow-400 font-semibold text-lg py-2">Clientes</a>
+                <a href="nuevo-cliente.html" class="block text-teal-300 hover:text-yellow-400 font-semibold text-lg py-2">Nuevo Cliente</a>
+            </div>
+        </nav>
+    </header>
+    <main class="max-w-2xl mx-auto px-2 md:px-5 py-6 md:py-10 bg-gray-900 min-h-screen">
+        <h2 class="text-2xl md:text-3xl font-light text-center mb-6 text-white">Editar Cliente</h2>
+        <!-- Toast Notification -->
+        <div id="toast" class="hidden fixed top-4 right-4 md:top-8 md:right-8 z-[9999] max-w-xs w-full px-4 py-3 rounded shadow-lg text-white font-semibold"></div>
+        <div class="flex flex-col mt-6 md:mt-10 items-center">
+            <div class="w-full">
+                <div class="shadow overflow-hidden sm:rounded-lg border-b border-gray-800 bg-gray-900">
+                    <form id="formulario" class="bg-gray-900 p-3" aria-label="Formulario para editar cliente">
+                        <div class="mb-4">
+                            <label class="block text-gray-300 text-sm font-bold mb-2" for="nombre">Nombre</label>
+                            <input 
+                                class="appearance-none border border-gray-700 rounded w-full py-2 px-3 bg-gray-800 text-white leading-tight focus:outline-none focus:shadow-outline"
+                                id="nombre"
+                                name="nombre"
+                                type="text"
+                                placeholder="Nombre Cliente"
+                            />
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-300 text-sm font-bold mb-2" for="email">Correo</label>
+                            <input 
+                                class="appearance-none border border-gray-700 rounded w-full py-2 px-3 bg-gray-800 text-white leading-tight focus:outline-none focus:shadow-outline"
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="Email Cliente"
+                            />
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-300 text-sm font-bold mb-2" for="telefono">Teléfono</label>
+                            <input 
+                                class="appearance-none border border-gray-700 rounded w-full py-2 px-3 bg-gray-800 text-white leading-tight focus:outline-none focus:shadow-outline"
+                                id="telefono"
+                                name="telefono"
+                                type="tel"
+                                placeholder="Teléfono Cliente"
+                            />
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-300 text-sm font-bold mb-2" for="empresa">Empresa</label>
+                            <input 
+                                class="appearance-none border border-gray-700 rounded w-full py-2 px-3 bg-gray-800 text-white leading-tight focus:outline-none focus:shadow-outline"
+                                id="empresa"
+                                name="empresa"
+                                type="text"
+                                placeholder="Empresa Cliente"
+                            />
+                        </div>
+                        <input type="hidden" name="id" id="id" value="">
+                        <input
+                            type="submit"
+                            class="bg-teal-400 hover:bg-teal-500 w-full mt-5 p-2 text-gray-900 uppercase font-bold rounded"
+                            value="Actualizar Cliente"
+                        />
+                    </form>
+                </div>
+            </div>
+        </div>
+   
+    </main>
+    <script src="js/editarcliente.js"></script>
+    <script>
+    // Drawer nav toggle
+    const navToggle = document.getElementById('nav-toggle');
+    const drawerMenu = document.getElementById('drawer-menu');
+    const drawerBackdrop = document.getElementById('drawer-backdrop');
+    const drawerClose = document.getElementById('drawer-close');
+    function closeDrawer() {
+        drawerMenu.classList.add('hidden');
+        drawerBackdrop.classList.add('hidden');
+    }
+    navToggle.addEventListener('click', () => {
+        drawerMenu.classList.remove('hidden');
+        drawerBackdrop.classList.remove('hidden');
+    });
+    drawerClose.addEventListener('click', closeDrawer);
+    drawerBackdrop.addEventListener('click', closeDrawer);
+    Array.from(drawerMenu.querySelectorAll('a')).forEach(link => {
+        link.addEventListener('click', closeDrawer);
+    });
+    </script>
+</body>
+</html>

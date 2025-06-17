@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Tool</title>
+    <link rel="icon" href="https://img.icons8.com/ios-filled/50/26e07f/address-book.png">
+    <link rel="stylesheet" href="css/tailwind.min.css">
+    <style>
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 8px;
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #14b8a6;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #facc15;
+    }
+    </style>
+</head>
+<body class="min-h-100 bg-gray-900">
+    <!-- Header/Navbar -->
+    <header class="bg-gray-800 shadow-md py-4 px-4 md:px-6 flex items-center justify-between z-50 relative">
+        <div class="flex items-center gap-2">
+            <img src="https://img.icons8.com/ios-filled/50/26e07f/address-book.png" alt="CRM Logo" class="w-8 h-8">
+            <span class="text-xl font-bold text-teal-400">CRM Tool</span>
+        </div>
+        <!-- Responsive Nav -->
+        <nav>
+            <button id="nav-toggle" class="md:hidden text-teal-300 focus:outline-none text-3xl" aria-label="Abrir menú">&#9776;</button>
+            <ul id="nav-menu" class="hidden md:flex gap-4 flex-row">
+                <li><a href="index.html" class="block text-teal-300 hover:text-yellow-400 font-semibold py-2 md:py-0">Clientes</a></li>
+                <li><a href="nuevo-cliente.html" class="block text-teal-300 hover:text-yellow-400 font-semibold py-2 md:py-0">Nuevo Cliente</a></li>
+            </ul>
+            <!-- Drawer y Backdrop -->
+            <div id="drawer-backdrop" class="hidden fixed inset-0 bg-black bg-opacity-60 z-[10000] md:hidden"></div>
+            <div id="drawer-menu" class="hidden fixed top-0 right-0 h-full w-64 bg-gray-900 z-[10001] shadow-lg flex flex-col p-6 gap-6 md:hidden transition-transform">
+                <button id="drawer-close" class="text-3xl text-gray-400 hover:text-teal-400 self-end mb-4" aria-label="Cerrar menú">&times;</button>
+                <a href="index.html" class="block text-teal-300 hover:text-yellow-400 font-semibold text-lg py-2">Clientes</a>
+                <a href="nuevo-cliente.html" class="block text-teal-300 hover:text-yellow-400 font-semibold text-lg py-2">Nuevo Cliente</a>
+            </div>
+        </nav>
+    </header>
+    <main class="max-w-5xl mx-auto px-2 md:px-5 py-6 md:py-10 bg-gray-900 min-h-screen">
+        <h2 class="text-2xl md:text-3xl font-light text-center mb-6 text-white">Clientes</h2>
+        <!-- Search and Sort -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <input id="search-client" type="text" placeholder="Buscar cliente..." class="w-full md:w-1/3 px-3 py-2 border border-gray-700 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-teal-400" aria-label="Buscar cliente">
+            <select id="sort-client" class="w-full md:w-1/4 px-3 py-2 border border-gray-700 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-teal-400" aria-label="Ordenar clientes">
+                <option value="nombre">Ordenar por Nombre</option>
+                <option value="empresa">Ordenar por Empresa</option>
+                <option value="email">Ordenar por Correo</option>
+            </select>
+        </div>
+        <!-- Toast Notification -->
+        <div id="toast" class="hidden fixed top-4 right-4 z-50 max-w-xs w-full px-4 py-3 rounded shadow-lg text-white font-semibold"></div>
+        <!-- Client Table -->
+        <div class="flex flex-col mt-6 md:mt-10">
+            <div class="overflow-x-auto w-full custom-scrollbar">
+              <div class="align-middle inline-block min-w-full w-full shadow overflow-x-auto custom-scrollbar sm:rounded-lg border-b border-gray-800 bg-gray-900">
+                <table class="min-w-[600px] w-full bg-gray-900 text-white text-sm md:text-base">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th class="px-3 md:px-6 py-2 md:py-3 border-b border-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-teal-300 uppercase tracking-wider">Nombre Cliente</th>
+                            <th class="px-3 md:px-6 py-2 md:py-3 border-b border-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-teal-300 uppercase tracking-wider">Correo</th>
+                            <th class="px-3 md:px-6 py-2 md:py-3 border-b border-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-teal-300 uppercase tracking-wider">Teléfono</th>
+                            <th class="px-3 md:px-6 py-2 md:py-3 border-b border-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-teal-300 uppercase tracking-wider">Empresa</th>
+                            <th class="px-3 md:px-6 py-2 md:py-3 border-b border-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-yellow-400 uppercase tracking-wider">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listado-clientes" class="bg-gray-900"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <!-- Delete Confirmation Modal -->
+        <div id="modal-delete" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 md:p-8 max-w-sm w-full text-center border border-gray-700">
+                <h3 class="text-lg font-bold mb-4 text-yellow-400">¿Eliminar cliente?</h3>
+                <p class="mb-6 text-gray-300">Esta acción no se puede deshacer.</p>
+                <div class="flex justify-center gap-4">
+                    <button id="confirm-delete" class="bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded">Eliminar</button>
+                    <button id="cancel-delete" class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-4 py-2 rounded">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center text-gray-400 mt-10">
+            <img src="https://img.icons8.com/ios-filled/100/444444/opened-folder.png" class="mx-auto mb-4" alt="Sin clientes">
+            <p>No hay clientes registrados.</p>
+        </div>
+
+    </main>
+    <footer class="bg-gray-800 text-center py-6 px-4 mt-8 border-t border-gray-700">
+        <div class="max-w-2xl mx-auto">
+            <p class="text-gray-500 text-sm">Desarrollado por Devri: David González.</p>
+        </div>
+    </footer>
+    <script src="js/app.js"></script>
+    <script>
+    // Drawer nav toggle
+    const navToggle = document.getElementById('nav-toggle');
+    const drawerMenu = document.getElementById('drawer-menu');
+    const drawerBackdrop = document.getElementById('drawer-backdrop');
+    const drawerClose = document.getElementById('drawer-close');
+    function closeDrawer() {
+        drawerMenu.classList.add('hidden');
+        drawerBackdrop.classList.add('hidden');
+    }
+    navToggle.addEventListener('click', () => {
+        drawerMenu.classList.remove('hidden');
+        drawerBackdrop.classList.remove('hidden');
+    });
+    drawerClose.addEventListener('click', closeDrawer);
+    drawerBackdrop.addEventListener('click', closeDrawer);
+    Array.from(drawerMenu.querySelectorAll('a')).forEach(link => {
+        link.addEventListener('click', closeDrawer);
+    });
+    </script>
+</body>
+</html>
