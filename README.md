@@ -64,7 +64,3 @@ CRM with IndexDB/
 ## Autor
 
 Desarrollado por Devri: David González.
-
----
-
-¡Siéntete libre de usar, modificar y compartir este CRM para tus propios proyectos o portafolio! 
